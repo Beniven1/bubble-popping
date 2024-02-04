@@ -40,6 +40,10 @@
     // Load your pop sound file (replace with actual path)
     const popSoundPromise = fetch('sounds/pop.mp3').then(response => response.arrayBuffer());
 
+    // Track currently playing sounds (limit to 2 for demonstration)
+    let playingSounds = 0;
+    const maxConcurrentSounds = 2; // Adjust limit as needed
+
     // Create bubbles (adjust rows and columns as needed)
     for (let i = 0; i < 10; i++) {
       for (let j = 0; j < 20; j++) {
@@ -49,12 +53,21 @@
 
         // Add event listener for click
         button.addEventListener('click', () => {
-          popSoundPromise.then(buffer => {
-            const popSoundSource = audioCtx.createBufferSource();
-            popSoundSource.buffer = buffer;
-            popSoundSource.connect(audioCtx.destination);
-            popSoundSource.start();
-          });
+          // Check if we can play another sound simultaneously
+          if (playingSounds < maxConcurrentSounds) {
+            popSoundPromise.then(buffer => {
+              const popSoundSource = audioCtx.createBufferSource();
+              popSoundSource.buffer = buffer;
+              popSoundSource.connect(audioCtx.destination);
+              popSoundSource.start();
+
+              // Track and limit playing sounds
+              playingSounds++;
+              popSoundSource.addEventListener('ended', () => {
+                playingSounds--;
+              });
+            });
+          }
         });
       }
     }
