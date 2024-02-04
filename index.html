@@ -6,14 +6,14 @@
   <title>Pop That Bubble Wrap!</title>
   <style>
     .bubble-wrap {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
-      gap: 5px;
-      width: fit-content; /* Adjust width as needed */
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      width: 500px; /* Adjust width as needed */
       margin: 0 auto;
     }
 
-    .spoiler-button {
+    .bubble-button {
       background-color: #ddd;
       border: none;
       border-radius: 50%;
@@ -22,7 +22,7 @@
       cursor: pointer;
     }
 
-    .spoiler-button:hover {
+    .bubble-button:hover {
       background-color: #eee;
     }
   </style>
@@ -40,16 +40,19 @@
     // Function to create a single bubble element
     function createBubble() {
       const button = document.createElement('button');
-      button.classList.add('spoiler-button');
+      button.classList.add('bubble-button');
       button.addEventListener('click', () => {
-        popSound.play();
+        popSound.play(); // Play sound immediately on click
+        // No need to change button appearance as it's not a single-use "pop"
       });
       return button;
     }
 
-    // Generate and append a large number of bubbles (adjust as needed)
-    for (let i = 0; i < 10000; i++) { // You can change 10000 to any desired number
-      bubbleWrap.appendChild(createBubble());
+    // Generate and append bubbles (adjust rows and columns as needed)
+    for (let i = 0; i < 10; i++) { // Adjust rows
+      for (let j = 0; j < 20; j++) { // Adjust columns
+        bubbleWrap.appendChild(createBubble());
+      }
     }
   </script>
 </body>
