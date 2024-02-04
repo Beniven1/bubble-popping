@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pop That Bubble Wrap!</title>
+  <style>
+    .bubble-wrap {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
+      gap: 5px;
+      width: fit-content; /* Adjust width as needed */
+      margin: 0 auto;
+    }
+
+    .spoiler-button {
+      background-color: #ddd;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .spoiler-button:hover {
+      background-color: #eee;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pop That Bubble Wrap!</h1>
+  <div class="bubble-wrap">
+    </div>
+
+  <audio id="pop-sound" src="sounds/pop.mp3"></audio>
+  <script>
+    const bubbleWrap = document.querySelector('.bubble-wrap');
+    const popSound = document.getElementById('pop-sound');
+
+    // Function to create a single bubble element
+    function createBubble() {
+      const button = document.createElement('button');
+      button.classList.add('spoiler-button');
+      button.addEventListener('click', () => {
+        popSound.play();
+      });
+      return button;
+    }
+
+    // Generate and append a large number of bubbles (adjust as needed)
+    for (let i = 0; i < 10000; i++) { // You can change 10000 to any desired number
+      bubbleWrap.appendChild(createBubble());
+    }
+  </script>
+</body>
+</html>
