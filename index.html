@@ -32,9 +32,15 @@
   <div class="bubble-wrap">
   </div>
 
+  <audio id="pop-sound" src="sounds/pop.mp3"></audio>
+
   <script>
     const bubbleWrap = document.querySelector('.bubble-wrap');
-    const popSound = new Audio("sounds/pop.mp3"); // Replace with your sound file path
+    const popSound = document.getElementById('pop-sound');
+
+    // Track currently playing sounds (limit to 3 for demonstration)
+    let playingSounds = 0;
+    const maxConcurrentSounds = 3; // Adjust limit as needed
 
     // Create bubbles (adjust rows and columns as needed)
     for (let i = 0; i < 10; i++) {
@@ -45,7 +51,17 @@
 
         // Add event listener for click
         button.addEventListener('click', () => {
-          popSound.play(); // Play the sound on click
+          // Stop any sound exceeding the limit
+          if (playingSounds >= maxConcurrentSounds) {
+            const stoppedSound = document.querySelector('audio[src="sounds/pop.mp3"]:not([paused])');
+            if (stoppedSound) {
+              stoppedSound.pause();
+              playingSounds--;
+            }
+          }
+
+          popSound.cloneNode(false).play(); // Create and play a clone of the original audio element
+          playingSounds++;
         });
       }
     }
