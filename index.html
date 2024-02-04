@@ -32,11 +32,14 @@
   <div class="bubble-wrap">
   </div>
 
-  <audio id="pop-sound" src="sounds/pop.mp3"></audio>
+  <audio id="pop-sound1" src="sounds/pop.mp3"></audio>
+  <audio id="pop-sound2" src="sounds/pop2.mp3"></audio>
+  <audio id="pop-sound3" src="sounds/pop3.mp3"></audio>
+  <audio id="pop-sound4" src="sounds/pop4.mp3"></audio>
+  <audio id="pop-sound5" src="sounds/pop5.mp3"></audio>
 
   <script>
     const bubbleWrap = document.querySelector('.bubble-wrap');
-    const popSound = document.getElementById('pop-sound');
 
     // Track currently playing sounds (limit to 3 for demonstration)
     let playingSounds = 0;
@@ -53,14 +56,18 @@
         button.addEventListener('click', () => {
           // Stop any sound exceeding the limit
           if (playingSounds >= maxConcurrentSounds) {
-            const stoppedSound = document.querySelector('audio[src="sounds/pop.mp3"]:not([paused])');
+            const stoppedSound = document.querySelector('audio:not([paused])');
             if (stoppedSound) {
               stoppedSound.pause();
               playingSounds--;
             }
           }
 
-          popSound.cloneNode(false).play(); // Create and play a clone of the original audio element
+          // Randomly select one of the 5 pop sounds
+          const randomSoundIndex = Math.floor(Math.random() * 5);
+          const chosenPopSound = document.getElementById(`pop-sound${randomSoundIndex + 1}`); // Offset by 1 for correct ID
+
+          chosenPopSound.cloneNode(false).play(); // Create and play a clone of the chosen sound
           playingSounds++;
         });
       }
