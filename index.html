@@ -32,37 +32,30 @@
   <div class="bubble-wrap">
     </div>
 
-  <audio id="pop-sound" src="sounds/pop.mp3"></audio>
+  <script src="https://cdn.jsdelivr.net/npm/@webaudio/api@0.6.3/dist/webaudio.min.js"></script>
   <script>
     const bubbleWrap = document.querySelector('.bubble-wrap');
-    const popSound = document.getElementById('pop-sound');
+    const audioCtx = new AudioContext();
 
-    const maxConcurrentSounds = 5; // Adjust the maximum number of sounds
-    let playingSounds = 0;
+    // Load your pop sound file (replace with actual path)
+    const popSoundPromise = fetch('sounds/pop.mp3').then(response => response.arrayBuffer());
 
-    // Function to create a single bubble element
-    function createBubble() {
-      const button = document.createElement('button');
-      button.classList.add('bubble-button');
-      button.addEventListener('click', () => {
-        // Check if we can play another sound simultaneously
-        if (playingSounds < maxConcurrentSounds) {
-          popSound.play();
-          playingSounds++;
+    // Create bubbles (adjust rows and columns as needed)
+    for (let i = 0; i < 10; i++) {
+      for (let j = 0; j < 20; j++) {
+        const button = document.createElement('button');
+        button.classList.add('bubble-button');
+        bubbleWrap.appendChild(button);
 
-          // Track and limit playing sounds
-          popSound.addEventListener('ended', () => {
-            playingSounds--;
+        // Add event listener for click
+        button.addEventListener('click', () => {
+          popSoundPromise.then(buffer => {
+            const popSoundSource = audioCtx.createBufferSource();
+            popSoundSource.buffer = buffer;
+            popSoundSource.connect(audioCtx.destination);
+            popSoundSource.start();
           });
-        }
-      });
-      return button;
-    }
-
-    // Generate and append bubbles (adjust rows and columns as needed)
-    for (let i = 0; i < 10; i++) { // Adjust rows
-      for (let j = 0; j < 20; j++) { // Adjust columns
-        bubbleWrap.appendChild(createBubble());
+        });
       }
     }
   </script>
