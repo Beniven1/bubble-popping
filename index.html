@@ -30,19 +30,15 @@
 <body>
   <h1>Pop That Bubble Wrap!</h1>
   <div class="bubble-wrap">
-    </div>
+  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@webaudio/api@0.6.3/dist/webaudio.min.js"></script>
-  <script>
+  <audio id="pop-sound" src="sounds/pop.mp3"></audio> <script>
     const bubbleWrap = document.querySelector('.bubble-wrap');
-    const audioCtx = new AudioContext();
+    const popSound = document.getElementById('pop-sound');
 
-    // Load your pop sound file (replace with actual path)
-    const popSoundPromise = fetch('sounds/pop.mp3').then(response => response.arrayBuffer());
-
-    // Track currently playing sounds (limit to 2 for demonstration)
+    // Track currently playing sounds (limit to 3 for demonstration)
     let playingSounds = 0;
-    const maxConcurrentSounds = 2; // Adjust limit as needed
+    const maxConcurrentSounds = 3; // Adjust limit as needed
 
     // Create bubbles (adjust rows and columns as needed)
     for (let i = 0; i < 10; i++) {
@@ -55,18 +51,8 @@
         button.addEventListener('click', () => {
           // Check if we can play another sound simultaneously
           if (playingSounds < maxConcurrentSounds) {
-            popSoundPromise.then(buffer => {
-              const popSoundSource = audioCtx.createBufferSource();
-              popSoundSource.buffer = buffer;
-              popSoundSource.connect(audioCtx.destination);
-              popSoundSource.start();
-
-              // Track and limit playing sounds
-              playingSounds++;
-              popSoundSource.addEventListener('ended', () => {
-                playingSounds--;
-              });
-            });
+            popSound.cloneNode(false).play(); // Create and play a clone of the original audio element
+            playingSounds++;
           }
         });
       }
