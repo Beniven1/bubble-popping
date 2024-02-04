@@ -32,18 +32,21 @@
   <div class="bubble-wrap">
     </div>
 
-  <audio id="pop-sound" src="sounds/pop.mp3"></audio>
+  <audio id="pop-sound-1" src="sounds/pop1.mp3"></audio>
+  <audio id="pop-sound-2" src="sounds/pop2.mp3"></audio>
   <script>
     const bubbleWrap = document.querySelector('.bubble-wrap');
-    const popSound = document.getElementById('pop-sound');
+    const popSound1 = document.getElementById('pop-sound-1');
+    const popSound2 = document.getElementById('pop-sound-2');
 
     // Function to create a single bubble element
     function createBubble() {
       const button = document.createElement('button');
       button.classList.add('bubble-button');
       button.addEventListener('click', () => {
-        popSound.play(); // Play sound immediately on click
-        // No need to change button appearance as it's not a single-use "pop"
+        // Choose a random sound
+        const randomSound = Math.random() < 0.5 ? popSound1 : popSound2;
+        randomSound.play();
       });
       return button;
     }
