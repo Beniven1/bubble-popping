@@ -20,57 +20,64 @@
       width: 20px;
       height: 20px;
       cursor: pointer;
+      animation: pop 1s linear infinite alternate; /* Optional pop animation */
     }
 
-    .bubble-button:hover {
-      background-color: #eee;
+    .popping { /* Optional pop effect style */
+      transform: scale(1.1);
+      opacity: 0.8;
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
   </style>
 </head>
 <body>
   <h1>Pop That Bubble Wrap!</h1>
-  <div class="bubble-wrap">
-  </div>
+  <div class="bubble-wrap"></div>
 
-  <audio id="pop-sound1" src="sounds/pop.mp3"></audio>
-  <audio id="pop-sound2" src="sounds/pop2.mp3"></audio>
-  <audio id="pop-sound3" src="sounds/pop3.mp3"></audio>
-  <audio id="pop-sound4" src="sounds/pop4.mp3"></audio>
+  <audio id="pop-sound" src="sounds/pop.mp3"></audio>
 
   <script>
-    const bubbleWrap = document.querySelector('.bubble-wrap');
+    const bubbles = document.querySelectorAll(".bubble-button");
+    const popSound = new Audio("sounds/pop.mp3");
 
-    // Track currently playing sounds (limit to 3 for demonstration)
-    let playingSounds = 0;
-    const maxConcurrentSounds = 3; // Adjust limit as needed
+    // Set random interval between 1 and 3 seconds for bubble pops
+    const randomInterval = Math.floor(Math.random() * 2000) + 1000;
+
+    function playSound() {
+      // Randomly select a bubble element
+      const randomBubble = bubbles[Math.floor(Math.random() * bubbles.length)];
+
+      // Add a visual pop effect (optional)
+      randomBubble.classList.add("popping");
+      setTimeout(() => randomBubble.classList.remove("popping"), 100);
+
+      popSound.play();
+    }
 
     // Create bubbles (adjust rows and columns as needed)
     for (let i = 0; i < 10; i++) {
       for (let j = 0; j < 20; j++) {
         const button = document.createElement('button');
         button.classList.add('bubble-button');
-        bubbleWrap.appendChild(button);
-
-        // Add event listener for click
-        button.addEventListener('click', () => {
-          // Stop any sound exceeding the limit
-          if (playingSounds >= maxConcurrentSounds) {
-            const stoppedSound = document.querySelector('audio:not([paused])');
-            if (stoppedSound) {
-              stoppedSound.pause();
-              playingSounds--;
-            }
-          }
-
-          // Randomly select one of the 5 pop sounds
-          const randomSoundIndex = Math.floor(Math.random() * 5);
-          const chosenPopSound = document.getElementById(`pop-sound${randomSoundIndex + 1}`); // Offset by 1 for correct ID
-
-          chosenPopSound.cloneNode(false).play(); // Create and play a clone of the chosen sound
-          playingSounds++;
-        });
+        document.querySelector('.bubble-wrap').appendChild(button);
       }
     }
+
+    setInterval(playSound, randomInterval); // Call playSound at random intervals
   </script>
 </body>
 </html>
